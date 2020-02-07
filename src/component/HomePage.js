@@ -16,10 +16,10 @@ export default class HomePage extends Component {
     submitForm = (event) => {
         event.preventDefault();
         
-        var url = "http://localhost:8080/getDetails/?inputValue="+this.state.name;
+        var url = "http://localhost:8083/getDetails/?inputValue="+this.state.name;
         console.log(url);
         axios
-          .get(url)
+          .post(url)
           .then(res => {
             const details = res.data;
             this.setState({ vehicleDetails: details });
@@ -32,20 +32,23 @@ export default class HomePage extends Component {
     }
 
     handleChange = event => {
+        
         const target = event.target;
         const value = target.value;
         const name = target.name;
         this.setState({
-          [name]: value
+          [name]: value,
+          vehicleDetails : []
         });
     };
 
     displayOwnerRows() {
         console.log(this.state.vehicleDetails)
         console.log(this.state.name)
-        if(this.state.vehicleDetails === null || this.state.name === "")
+        if(this.state.name === "")
         {
             return( <div>No items are available</div>);
+
         }
 
         return this.state.vehicleDetails.map(d => {
@@ -64,6 +67,7 @@ export default class HomePage extends Component {
         return (
             <div>
             <div>
+                <h2>Vehicle vin number details</h2>
                 <form onSubmit={this.submitForm}>
                     Enter vin number : <input type="text" name="name" onChange={this.handleChange}/><br></br>
                     <button>submit</button>
